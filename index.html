@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>즐거운 미술시간</title>
+<title>지연샘과 즐거운 미술시간</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   :root{
     --bg:#f5f3fb; --panel:#ffffff; --ink:#2e2529; --muted:#847a90;
@@ -239,7 +240,7 @@
     <div class="brand" onclick="goMain()" style="cursor:pointer;" title="홈으로">
       <span class="logo">🎨</span>
       <div>
-        <h1>즐거운 미술시간</h1>
+        <h1>지연샘과 즐거운 미술시간</h1>
         <small>중학교 미술 놀이터</small>
       </div>
     </div>
@@ -272,7 +273,7 @@
     <!-- ============ 홈 (시작 화면) ============ -->
     <section class="page show" id="page-home">
       <div class="hero">
-        <h2>🎨 즐거운 미술시간에 오신 걸 환영해요!</h2>
+        <h2>🎨 지연샘과 즐거운 미술시간에 오신 걸 환영해요!</h2>
         <p>그리기·색채·명암 놀이부터 AI 미술 체험, 멋진 화가 감상, 미래 직업과 진로까지 — 미술의 모든 것을 재미있게 만나봐요. 아래에서 하고 싶은 활동을 골라 시작하세요!</p>
       </div>
       <div class="home-grid">
@@ -362,6 +363,8 @@
               <button class="mini gray" id="clearBtn">🗑️ 전체 지우기</button>
               <button class="mini" id="saveBtn">💾 저장</button>
             </div>
+            <label>🖼️ 갤러리에 올리기</label>
+            <input type="text" id="galleryName" placeholder="학번+이름 (예: 10130 김미술)" style="width:100%; padding:8px 10px; border:1.5px solid var(--line); border-radius:9px; font-family:inherit; font-size:13px; margin-bottom:6px;">
             <div class="row">
               <button class="mini" id="galleryBtn" style="background:#e7f0ff;color:#1971c2;">🖼️ 갤러리에 올리기</button>
             </div>
@@ -372,8 +375,11 @@
         </div>
 
         <div class="card" style="margin-top:16px;">
-          <h3>🖼️ 우리 반 그림 갤러리 <span style="font-size:12px;color:var(--muted);font-weight:600;">(최근 10개 · 새로 올리면 가장 오래된 그림이 빠져요)</span></h3>
-          <p class="lead" style="margin-bottom:12px;">그림을 완성했으면 왼쪽 도구의 <b>'🖼️ 갤러리에 올리기'</b>를 눌러 전시해 보세요!</p>
+          <div class="row" style="align-items:center; gap:10px; flex-wrap:wrap;">
+            <h3 style="margin:0;">🖼️ 우리 반 그림 갤러리 <span id="galleryCount" style="font-size:12px;color:var(--muted);font-weight:600;">(최대 30개)</span></h3>
+            <button class="mini" id="galleryDownloadBtn" style="margin-left:auto; background:#e6f7ec; color:#2b8a3e;">📦 모두 다운받기</button>
+          </div>
+          <p class="lead" style="margin:6px 0 12px;">왼쪽 도구에 <b>학번+이름</b>을 적고 <b>'🖼️ 갤러리에 올리기'</b>를 누르면 전시돼요. 다 모이면 선생님이 <b>'📦 모두 다운받기'</b>로 학번이름 파일로 저장할 수 있어요.</p>
           <div id="galleryEmpty" style="color:var(--muted); font-size:14px;">아직 올라온 그림이 없어요. 첫 작품을 올려보세요! 🎨</div>
           <div id="gallery" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:10px;"></div>
         </div>
@@ -1799,17 +1805,45 @@ function closeMajor(){ document.getElementById('majorModal').classList.remove('o
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeSchool(); closeMajor(); document.getElementById('lightbox').classList.remove('open'); } });
 
 /* ============ 우리 반 그림 갤러리 ============ */
-let gallery=[];
+const GALLERY_MAX=30;
+let gallery=[]; /* {img, label} */
+function galEsc(s){ return (s==null?'':''+s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+function galLoad(){ try{ const s=localStorage.getItem('funart_gallery'); if(s){ const a=JSON.parse(s); if(Array.isArray(a)) gallery=a; } }catch(e){} }
+function galSave(){ try{ localStorage.setItem('funart_gallery', JSON.stringify(gallery)); }catch(e){ /* 용량 초과 등: 이번 세션 화면에는 남아있음 */ } }
 function snapshotCanvas(){ const t=document.createElement('canvas'); t.width=cv.width; t.height=cv.height; const c=t.getContext('2d'); c.fillStyle='#fff'; c.fillRect(0,0,t.width,t.height); c.drawImage(cv,0,0); return t.toDataURL('image/png'); }
-function addToGallery(){ gallery.unshift(snapshotCanvas()); if(gallery.length>10) gallery=gallery.slice(0,10); renderGallery(); }
+function addToGallery(){
+  const inp=document.getElementById('galleryName'); const label=(inp?inp.value:'').trim();
+  if(!label){ alert('먼저 학번+이름을 적어주세요. (예: 10130 김미술)'); if(inp)inp.focus(); return; }
+  gallery.unshift({img:snapshotCanvas(), label:label});
+  if(gallery.length>GALLERY_MAX) gallery=gallery.slice(0,GALLERY_MAX);
+  if(inp)inp.value=''; galSave(); renderGallery();
+}
 function renderGallery(){
   const g=document.getElementById('gallery'), e=document.getElementById('galleryEmpty'); if(!g)return;
   e.style.display=gallery.length?'none':'block';
-  g.innerHTML=gallery.map((src,i)=>'<div style="position:relative;"><img src="'+src+'" onclick="viewGallery('+i+')" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:2px solid var(--line);cursor:pointer;box-shadow:0 2px 8px rgba(120,80,70,.08);"><button onclick="event.stopPropagation();delGallery('+i+')" title="삭제" style="position:absolute;top:5px;right:5px;border:0;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px;line-height:1;">✕</button></div>').join('');
+  const cnt=document.getElementById('galleryCount'); if(cnt)cnt.textContent='('+gallery.length+' / '+GALLERY_MAX+'개)';
+  g.innerHTML=gallery.map((it,i)=>'<div style="position:relative;"><img src="'+it.img+'" onclick="viewGallery('+i+')" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:2px solid var(--line);cursor:pointer;box-shadow:0 2px 8px rgba(120,80,70,.08);"><button onclick="event.stopPropagation();delGallery('+i+')" title="삭제" style="position:absolute;top:5px;right:5px;border:0;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px;line-height:1;">✕</button><div style="font-size:11.5px;text-align:center;margin-top:4px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+galEsc(it.label)+'</div></div>').join('');
 }
-function delGallery(i){ gallery.splice(i,1); renderGallery(); }
-function viewGallery(i){ document.getElementById('lbImg').src=gallery[i]; document.getElementById('lightbox').classList.add('open'); }
-(function(){ const gb=document.getElementById('galleryBtn'); if(gb) gb.onclick=addToGallery; })();
+function delGallery(i){ if(!confirm('이 그림을 갤러리에서 뺄까요?'))return; gallery.splice(i,1); galSave(); renderGallery(); }
+function viewGallery(i){ document.getElementById('lbImg').src=gallery[i].img; document.getElementById('lightbox').classList.add('open'); }
+function galSafeName(s){ return (s||'무제').replace(/[\\\/:*?"<>|]/g,' ').replace(/\s+/g,' ').trim().slice(0,60); }
+function galToday(){ const d=new Date(); const p=n=>String(n).padStart(2,'0'); return p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+'시'+p(d.getMinutes())+'분'; }
+function downloadAllGallery(){
+  if(!gallery.length){ alert('아직 갤러리에 그림이 없어요.'); return; }
+  const stamp=galToday(); const baseName='우리반갤러리('+stamp+')';
+  const seen={}; const items=gallery.slice().reverse().map(it=>{ let nm=galSafeName(it.label); if(seen[nm]!=null){ seen[nm]++; nm=nm+'('+seen[nm]+')'; } else seen[nm]=0; return {name:nm, img:it.img}; });
+  if(window.JSZip){
+    const zip=new JSZip(); const folder=zip.folder(baseName);
+    items.forEach(it=>{ const b64=it.img.split(',')[1]; folder.file(it.name+'.png', b64, {base64:true}); });
+    zip.generateAsync({type:'blob'}).then(blob=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=baseName+'.zip'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); })
+      .catch(()=>alert('압축 파일을 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.'));
+  } else {
+    // JSZip을 못 불러온 경우: 한 장씩 저장(브라우저가 여러 파일 다운로드를 허용해야 해요)
+    if(!confirm('그림을 한 장씩 저장할게요. 브라우저가 "여러 파일 다운로드"를 허용하는지 확인해 주세요. 계속할까요?'))return;
+    items.forEach((it,idx)=>{ setTimeout(()=>{ const a=document.createElement('a'); a.href=it.img; a.download=it.name+'.png'; a.click(); }, idx*400); });
+  }
+}
+(function(){ const gb=document.getElementById('galleryBtn'); if(gb) gb.onclick=addToGallery; const db=document.getElementById('galleryDownloadBtn'); if(db) db.onclick=downloadAllGallery; })();
 
 /* ============ 전시 정보 (자동 갱신 exhibitions.json) ============ */
 let expoData=null, expoRegion='전체';
@@ -2203,6 +2237,7 @@ updHarm();
 updVal();
 renderSchools();
 renderMajors();
+galLoad();
 renderGallery();
 
 /* ===== 선생님이 올린 수업·화가 자료 불러오기 (있을 때만 덮어쓰기) =====
