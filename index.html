@@ -263,6 +263,7 @@
       <li><button class="item" data-tab="job" onclick="go('job',this)"><span class="emoji">💼</span> 미술 관련 직업</button></li>
       <li><button class="item" data-tab="market" onclick="go('market',this)"><span class="emoji">💰</span> 현재 미술시장</button></li>
       <li><button class="item" data-tab="artist" onclick="go('artist',this)"><span class="emoji">⭐</span> 추천 화가·디자이너</button></li>
+      <li><button class="item" data-tab="material" onclick="go('material',this)"><span class="emoji">🎨</span> 미술재료 가이드</button></li>
       <li><button class="item" data-tab="expo" onclick="go('expo',this)"><span class="emoji">🖼️</span> 전시회 정보</button></li>
     </ul>
   </aside>
@@ -304,6 +305,10 @@
         <div class="home-card" style="border-top-color:#e8590c;" onclick="homeGo('market')">
           <span class="hemoji">💰</span><h4>현재 미술시장</h4>
           <p>그림은 어떻게 사고팔릴까? 미술시장 이야기</p>
+        </div>
+        <div class="home-card" style="border-top-color:#a9611f;" onclick="homeGo('material')">
+          <span class="hemoji">🎨</span><h4>미술재료 가이드</h4>
+          <p>파스텔, 색연필, 물감 등 다양한 미술 재료의 사용법을 배워요</p>
         </div>
         <div class="home-card" style="border-top-color:#1971c2;" onclick="homeGo('expo')">
           <span class="hemoji">🖼️</span><h4>전시회 정보</h4>
@@ -866,6 +871,52 @@
         <p id="modalDesc" style="font-size:14.5px; line-height:1.7;"></p>
         <p id="modalWork" style="font-size:13.5px; color:var(--muted); margin:0 0 14px;"></p>
         <a id="modalLink" class="btn" target="_blank" rel="noopener">🔗 실제 작품 보러 가기</a>
+      </div>
+    </div>
+
+    <!-- ============ 미술 재료 가이드 ============ -->
+    <section class="page" id="page-material">
+      <h2>🎨 미술 재료 가이드</h2>
+      <p class="lead">다양한 미술 재료의 설명, 사용 방법, 예시 작품, 그리고 유튜브 튜토리얼을 한 곳에서 볼 수 있어요!</p>
+
+      <div class="card">
+        <h3>🔍 미술 재료 검색</h3>
+        <input type="text" id="materialSearch" placeholder="재료 이름을 입력하세요 (예: 파스텔, 아크릴물감, 먹)" 
+          style="width:100%; padding:12px; border:2px solid var(--line); border-radius:12px; font-size:14px; font-family:inherit; box-sizing:border-box;">
+        <div id="searchResult" style="margin-top:12px;"></div>
+      </div>
+
+      <div id="materialList" class="grid g2" style="margin-top:12px;"></div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3>📚 재료별 상세 정보</h3>
+        <p class="lead">검색하거나 아래 재료 목록에서 선택하세요!</p>
+        <div id="materialGrid" class="grid g3"></div>
+      </div>
+    </section>
+
+    <!-- 재료 상세 팝업 -->
+    <div id="materialModal" class="modal" onclick="closeMaterial(event)">
+      <div class="modal-box" style="max-width:500px;" onclick="event.stopPropagation()">
+        <button class="modal-x" onclick="closeMaterial()">✕</button>
+        <div style="text-align:center; margin-bottom:6px;">
+          <span id="matEmoji" style="font-size:48px;"></span>
+        </div>
+        <h3 id="matName" style="text-align:center; margin-bottom:14px;"></h3>
+        
+        <p style="font-size:13px; font-weight:800; color:var(--accent); margin:0 0 3px;">📝 재료 설명</p>
+        <p id="matDesc" style="font-size:14px; line-height:1.7; margin:0 0 14px;"></p>
+        
+        <p style="font-size:13px; font-weight:800; color:var(--accent); margin:0 0 3px;">🎯 사용 방법</p>
+        <div id="matUsage" style="font-size:14px; line-height:1.7; margin:0 0 14px; white-space:pre-line;"></div>
+        
+        <p style="font-size:13px; font-weight:800; color:var(--accent); margin:0 0 3px;">🖼️ 예시 작품</p>
+        <p id="matExamples" style="font-size:14px; line-height:1.7; margin:0 0 14px;"></p>
+        
+        <div class="row">
+          <a id="matYoutube" class="btn" target="_blank" rel="noopener">🎥 유튜브에서 배우기</a>
+          <button class="btn ghost" onclick="closeMaterial()">닫기</button>
+        </div>
       </div>
     </div>
 
@@ -2263,6 +2314,83 @@ function mergeArtists(data){
 }
 fetch('lessons.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(mergeLessons).catch(()=>{});
 fetch('artists.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(mergeArtists).catch(()=>{});
+/* ============ 미술 재료 가이드 ============ */
+let MATERIALS = [];
+function loadMaterials(){
+  fetch('materials.json',{cache:'no-store'})
+    .then(r=>r.ok?r.json():null)
+    .then(data=>{
+      if(data && data.materials) {
+        MATERIALS = data.materials;
+        renderMaterialGrid();
+        setupMaterialSearch();
+      }
+    })
+    .catch(()=>console.log('materials.json 로드 실패'));
+}
+function renderMaterialGrid(){
+  const grid = document.getElementById('materialGrid');
+  if(!grid) return;
+  grid.innerHTML = MATERIALS.map(m=>
+    '<div class="tile" onclick="openMaterial(\''+m.id+'\')">'+
+    '<div style="font-size:32px; margin-bottom:4px;">'+m.emoji+'</div>'+
+    '<h4>'+m.name+'</h4>'+
+    '<p style="font-size:13px; color:var(--muted);">'+m.description.slice(0,35)+'…</p>'+
+    '</div>'
+  ).join('');
+}
+function openMaterial(id){
+  const mat = MATERIALS.find(m=>m.id===id);
+  if(!mat) return;
+  document.getElementById('matEmoji').textContent = mat.emoji;
+  document.getElementById('matName').textContent = mat.name;
+  document.getElementById('matDesc').textContent = mat.description;
+  document.getElementById('matUsage').textContent = mat.usage;
+  document.getElementById('matExamples').textContent = mat.examples;
+  document.getElementById('matYoutube').href = mat.youtube;
+  document.getElementById('materialModal').classList.add('open');
+  window.scrollTo(0,0);
+}
+function closeMaterial(e){
+  if(e && e.target.id !== 'materialModal') return;
+  document.getElementById('materialModal').classList.remove('open');
+}
+function setupMaterialSearch(){
+  const search = document.getElementById('materialSearch');
+  if(!search) return;
+  search.oninput = (e)=>{
+    const q = e.target.value.toLowerCase().trim();
+    if(!q){
+      document.getElementById('searchResult').innerHTML = '';
+      renderMaterialGrid();
+      return;
+    }
+    const results = MATERIALS.filter(m=>
+      m.name.includes(q) || 
+      m.description.includes(q) || 
+      m.examples.includes(q)
+    );
+    if(results.length){
+      document.getElementById('searchResult').innerHTML = 
+        '<div style="background:#e7f0ff; border:1px solid #c9e0ff; border-radius:12px; padding:12px; margin-bottom:12px; color:#1c3f66; font-weight:700;">'+
+        '🔍 '+results.length+'개의 재료를 찾았어요</div>';
+      document.getElementById('materialGrid').innerHTML = results.map(m=>
+        '<div class="tile" onclick="openMaterial(\''+m.id+'\')">'+
+        '<div style="font-size:32px; margin-bottom:4px;">'+m.emoji+'</div>'+
+        '<h4>'+m.name+'</h4>'+
+        '<p style="font-size:13px; color:var(--muted);">'+m.description.slice(0,35)+'…</p>'+
+        '</div>'
+      ).join('');
+    } else {
+      document.getElementById('searchResult').innerHTML = 
+        '<div style="background:#ffeaea; border:1px solid #ffc9c9; border-radius:12px; padding:12px; margin-bottom:12px; color:#c92a2a; font-weight:700;">'+
+        '😞 찾는 재료가 없어요. 다른 이름으로 검색해보세요!</div>';
+      document.getElementById('materialGrid').innerHTML = '';
+    }
+  };
+}
+loadMaterials();
+
 </script>
 </body>
 </html>
