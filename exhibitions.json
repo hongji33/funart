@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09",
+ "updated": "2026-11-16",
  "regions": [
   "서울",
   "경기·인천",
@@ -9,7 +9,7 @@
   "광주·전라",
   "강원·제주"
  ],
- "count": 39,
+ "count": 38,
  "items": [
   {
    "title": "2026 성북구립미술관 기획전시 《이정윤: 노래하는 집》",
@@ -64,6 +64,15 @@
    "realm": "전시",
    "url": "",
    "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202603/97f52b7bd29048009113bc38d2f91910.jpg"
+  },
+  {
+   "title": "[소마미술관] 조각이 꿈+틀(올림픽조각체험프로젝트#02)(상설전)",
+   "place": "소마미술관 2관",
+   "period": "2026.04.17 ~ 2027.02.14",
+   "region": "서울",
+   "realm": "전시",
+   "url": "",
+   "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202610/413b7278a2d4470e9e3aff091dca2623.png"
   },
   {
    "title": "漆 옻나무에서 칠기로",
@@ -145,15 +154,6 @@
    "realm": "전시",
    "url": "",
    "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202606/7eb1fa55aba44f849880d79043fffbcd.jpg"
-  },
-  {
-   "title": "2026 양평군립미술관 신진작가전 - 뉴 앙데팡당: Hit the Spot",
-   "place": "양평군립미술관",
-   "period": "2026.06.28 ~ 2026.11.29",
-   "region": "경기·인천",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/rdf/26/06/rdf_2026062921215762664.jpg"
   },
   {
    "title": "MMCA 해외 명작 : 수련과 샹들리에",
@@ -262,15 +262,6 @@
    "realm": "전시",
    "url": "",
    "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202607/2bd49226409547d3a1e0d109066173d8.png"
-  },
-  {
-   "title": "왕영미 개인전 《Sunflower Codes》",
-   "place": "루나아틀리에",
-   "period": "2026.07.01 ~ 2026.12.31",
-   "region": "대구·경북",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202608/392426b3e8384f2f90819e28fe92d513.jpg"
   },
   {
    "title": "2026 소장품 상설전 《시대와 함께한 예술가, 이응노》",
