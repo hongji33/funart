@@ -1,25 +1,15 @@
 {
- "updated": "2026-11-16",
+ "updated": "2026-11-23",
  "regions": [
   "서울",
   "경기·인천",
   "부산·경남",
   "대구·경북",
   "대전·충청",
-  "광주·전라",
   "강원·제주"
  ],
- "count": 38,
+ "count": 32,
  "items": [
-  {
-   "title": "2026 성북구립미술관 기획전시 《이정윤: 노래하는 집》",
-   "place": "김중업 건축문화의 집",
-   "period": "2026.04.17 ~ 2026.11.21",
-   "region": "서울",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202604/37944814e31142388e4f1a8df9b8f5c2.jpg"
-  },
   {
    "title": "2026 성북구립미술관 기획전시《집: 두 조각가를 잇다》",
    "place": "성북구립 최만린미술관",
@@ -82,24 +72,6 @@
    "realm": "전시",
    "url": "",
    "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2025/202512/e3cdccf38f2a4de085f8e6190f484469.jpg"
-  },
-  {
-   "title": "가나아트컬렉션 《기술의 저변: 경계에 선 장면들》",
-   "place": "서울시립미술관",
-   "period": "2026.04.16 ~ 2026.11.22",
-   "region": "서울",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202604/d75df319f1e94752b8e37e952da7a051.jpg"
-  },
-  {
-   "title": "개관 20주년 기념 「북적북적(BOOK的BOOK積) 20년: 우리가 자란 시간, 우리가 그릴 미래」",
-   "place": "국립어린이청소년도서관",
-   "period": "2026.06.26 ~ 2026.11.30",
-   "region": "서울",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202607/33cab048514b4a4db225ed92a3b294c2.png"
   },
   {
    "title": "고희동미술관 재개관 6주년기념전시  「만고상청萬古常靑: 군자의 품격」",
@@ -165,24 +137,6 @@
    "img": "http://www.culture.go.kr/upload/rdf/25/09/rdf_2025091721221710441.jpg"
   },
   {
-   "title": "공룡AR트릭아트전",
-   "place": "화성어린이복합문화센터 아이누리극장",
-   "period": "2024.01.01 ~ 2026.12.31",
-   "region": "경기·인천",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/rdf/24/11/rdf_2024110121225855972.jpg"
-  },
-  {
-   "title": "김포문화재단 소장전 《미래를 꿈꾸는 한강 문화8경》",
-   "place": "김포문화재단",
-   "period": "2026.06.23 ~ 2026.12.31",
-   "region": "경기·인천",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/rdf/26/07/rdf_2026070721243506757.jpg"
-  },
-  {
    "title": "미디어&middot;아트 융합 전시 DREAM LIGHT",
    "place": "수원시미디어센터",
    "period": "2025.09.26 ~ 2026.12.31",
@@ -190,6 +144,15 @@
    "realm": "전시",
    "url": "",
    "img": "http://www.culture.go.kr/upload/rdf/25/09/show_2025091611132321211.jpg"
+  },
+  {
+   "title": "오~감각미술관",
+   "place": "국립현대미술관 과천관",
+   "period": "2026.04.30 ~ 2027.02.21",
+   "region": "경기·인천",
+   "realm": "전시",
+   "url": "",
+   "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202605/f129d2bc798a4edd8e2e8a93c58476c9.JPG"
   },
   {
    "title": "하남역사박물관 이성산성 실감관 &lt;이성산성, 한강을 지배하다&gt;",
@@ -210,13 +173,13 @@
    "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202602/aa3635af7dad4cc3b4fac2820f853df3.png"
   },
   {
-   "title": "2026년 기획전시 &lt;호랑이 담배 피던 시절&gt;",
-   "place": "사상생활사박물관",
-   "period": "2026.06.23 ~ 2027.01.31",
+   "title": "2026년 홍티아트센터 입주작가 &sum;Mmm(이음)전 - Serendipity: 우연이 의미가 되는 순간",
+   "place": "홍티아트센터",
+   "period": "2026.04.29 ~ 2026.11.25",
    "region": "부산·경남",
    "realm": "전시",
    "url": "",
-   "img": "http://www.culture.go.kr/upload/rdf/26/06/rdf_2026062921215853684.jpg"
+   "img": "http://www.culture.go.kr/upload/rdf/26/11/rdf_2026111721171890804.jpg"
   },
   {
    "title": "클레이아크김해미술관 개관 20주년 특별기획전 &lt;주름과 덧댐&gt;",
@@ -235,15 +198,6 @@
    "realm": "전시",
    "url": "",
    "img": "http://www.culture.go.kr/upload/rdf/25/12/show_2025121121334580549.jpg"
-  },
-  {
-   "title": "2026년 방짜유기박물관 &lsquo;팔공산 선비의 멋, 공산의 구곡&rsquo;",
-   "place": "대구방짜유기박물관",
-   "period": "2026.05.27 ~ 2026.11.22",
-   "region": "대구·경북",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202609/b950fe6d39b9477e97fb0215cb96f010.jpg"
   },
   {
    "title": "[실감 미디어아트 체험전 리뉴얼] NEW! The경주; 경주연대기",
@@ -316,15 +270,6 @@
    "realm": "전시",
    "url": "",
    "img": "http://www.culture.go.kr/upload/rdf/25/07/rdf_2025072421292200942.jpg"
-  },
-  {
-   "title": "모던시대 선비의 안목이 머문 자리 - 일상과 예술의 균형",
-   "place": "국립나주박물관",
-   "period": "2026.06.23 ~ 2026.12.31",
-   "region": "광주·전라",
-   "realm": "전시",
-   "url": "",
-   "img": "http://www.culture.go.kr/upload/ucms/oneCltInfo/2026/202606/9fe99c8d32254b1586546502343819ea.jpg"
   },
   {
    "title": "10/10: 미술관 10년의 선택",
